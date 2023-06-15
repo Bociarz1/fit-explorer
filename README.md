@@ -1,5 +1,5 @@
 ## Fit-explorer
-#The application aims to facilitate users in finding, adding, and editing places for physical activities in their area.
+The application aims to facilitate users in finding, adding, and editing places for physical activities in their area.
 
 This app is still in progress...
 
