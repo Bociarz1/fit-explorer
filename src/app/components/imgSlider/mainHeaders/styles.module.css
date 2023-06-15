@@ -1,0 +1,12 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  margin: 0 auto;
+  padding-top: 20%;
+  gap: 20px;
+  width: 90%;
+  text-align: center;
+  color: #fff;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; /* Bottom-right shadow */
+}

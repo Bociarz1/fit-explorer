@@ -1,0 +1,20 @@
+.containerLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 64px 1fr auto;
+  min-height: 100vh;
+  max-width: 100%;
+}
+.containerPage {
+  grid-row: 2;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 100%;
+}
+
+@media (width > 900px) {
+  .containerLayout {
+    grid-template-rows: 68.5px 1fr auto;
+  }
+}

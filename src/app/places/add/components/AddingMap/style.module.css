@@ -1,0 +1,4 @@
+.tooltip {
+  z-index: 999999;
+  pointer-events: all;
+}
