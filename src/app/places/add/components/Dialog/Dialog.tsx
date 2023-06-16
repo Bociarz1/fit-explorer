@@ -11,46 +11,56 @@ import { Place } from "@/services/place/placeInterface";
 import NewPlaceForm from "./components/NewPlaceForm/NewPlaceForm";
 import { LatLng } from "leaflet";
 
-function MuiDialog({displayDialog,closeDialog,clickedPosition}:{displayDialog: boolean,closeDialog:()=>void,clickedPosition:LatLng | undefined}) {
-
-  useEffect(()=>{
-    setOpen(displayDialog)
-  },[displayDialog])
+function MuiDialog({
+  displayDialog,
+  closeDialog,
+  mainTitle,
+  descriptionText,
+  buttonAcceptTitle,
+  buttonCancelTitle,
+  handleSubmitBtn,
+  valid,
+  children,
+}: {
+  displayDialog: boolean;
+  closeDialog: () => void;
+  mainTitle: string;
+  descriptionText: string;
+  buttonAcceptTitle: string;
+  buttonCancelTitle: string;
+  handleSubmitBtn: () => void;
+  valid: boolean;
+  children: React.ReactNode;
+}) {
+  useEffect(() => {
+    setOpen(displayDialog);
+  }, [displayDialog]);
 
   const [open, setOpen] = useState<boolean>(false);
-  const [newPlaceData,setNewPlaceData] = useState<Place>()
-
-  function dispatchNewPlaceForm(newPlace:Place) {
-    if(clickedPosition === undefined) return
-    newPlace.position = {lat:clickedPosition.lat,lng:clickedPosition.lng}
-    setNewPlaceData(newPlace)
-
-  }
 
   const handleClose = () => {
     setOpen(false);
-    closeDialog()
+    closeDialog();
   };
 
   const Send = () => {
-    newPlaceData ? addPlace(newPlaceData) : null
-    handleClose()
-
+    handleSubmitBtn();
+    handleClose();
   };
 
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Formularz obiektu</DialogTitle>
+        <DialogTitle>{mainTitle}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Wprowadź dane obiektu i wyślij do weryfikacji administratorom
-          </DialogContentText>
-          <NewPlaceForm dispatchNewPlaceForm={dispatchNewPlaceForm}/>
+          <DialogContentText>{descriptionText}</DialogContentText>
+          {children}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Anuluj</Button>
-          <Button onClick={Send}>Wyślij</Button>
+          <Button onClick={handleClose}>{buttonCancelTitle}</Button>
+          <Button onClick={Send} disabled={!valid}>
+            {buttonAcceptTitle}
+          </Button>
         </DialogActions>
       </Dialog>
     </>

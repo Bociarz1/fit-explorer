@@ -1,4 +1,4 @@
-interface Adress {
+export interface Address {
   country: string;
   street: string;
   nr: string;
@@ -10,7 +10,7 @@ interface Adress {
 export default async function autoAddress(
   lat: number,
   lng: number
-): Promise<Adress | {errorMessage:string}> {
+): Promise<Address | {errorMessage:string}> {
   const apiKey = "d337b5cd0aaf420aafc758a75ee3a3fd";
 
   const url = `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&apiKey=${apiKey}`;
@@ -18,7 +18,7 @@ export default async function autoAddress(
   try {
     const response = await fetch(url);
     const data = await response.json();
-    const adress: Adress = {
+    const adress: Address = {
       country: data.features[0].properties.country,
       street: data.features[0].properties.street,
       nr: data.features[0].properties.housenumber,

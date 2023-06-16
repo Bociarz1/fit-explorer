@@ -1,32 +1,31 @@
-import SelectInput from "@/app/dashboard/components/selectInput/SelectInput";
+import SelectInput from "@/app/sharedComponents/inputs/selectInput/SelectInput";
 import { TextField } from "@mui/material";
 import FileInput from "../FileInput/FileInput";
 import { ErrorMessage, useFormik } from "formik";
 import { Place } from "@/services/place/placeInterface";
 import { useEffect } from "react";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 function NewPlaceForm({
   dispatchNewPlaceForm,
 }: {
   dispatchNewPlaceForm: (newPlae: Place) => void;
 }) {
-
   const validationSchema = Yup.object({
-    category: Yup.string().required('Category is required'),
-    province: Yup.string().required('Province is required'),
-    city: Yup.string().required('City is required'),
+    category: Yup.string().required("Category is required"),
+    province: Yup.string().required("Province is required"),
+    city: Yup.string().required("City is required"),
     address: Yup.object({
-      street: Yup.string().required('Street is required'),
-      nr: Yup.string().required('Number is required'),
+      street: Yup.string().required("Street is required"),
+      nr: Yup.string().required("Number is required"),
     }),
-    imgsUrl: Yup.array().required('Image URLs are required'),
-    description: Yup.string().required('Description is required'),
+    imgsUrl: Yup.array().required("Image URLs are required"),
+    description: Yup.string().required("Description is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      position:{lat:0,lng:0},
+      position: { lat: 0, lng: 0 },
       category: "",
       province: "",
       city: "",
@@ -41,24 +40,21 @@ function NewPlaceForm({
       },
       description: "",
     },
-    validationSchema:{validationSchema},
-    onSubmit: (values:Place) => {
-    },
+    validationSchema: { validationSchema },
+    onSubmit: (values: Place) => {},
   });
 
-  useEffect(()=>{
-    dispatchNewPlaceForm(formik.values)
-  },[formik.values])
-
+  useEffect(() => {
+    dispatchNewPlaceForm(formik.values);
+  }, [formik.values]);
 
   function dispatchImgs(imgs: string[]) {
-    formik.setFieldValue("imgsUrl", imgs)
+    formik.setFieldValue("imgsUrl", imgs);
   }
 
   return (
     <form onSubmit={formik.handleSubmit}>
-
-<SelectInput
+      <SelectInput
         label=" Kategoria obiektu"
         formik={formik}
         name={formik.values.category}
