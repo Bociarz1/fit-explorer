@@ -23,7 +23,7 @@ export default async function autoAddress(
       street: data.features[0].properties.street,
       nr: data.features[0].properties.housenumber,
       postCode: data.features[0].properties.postcode,
-      region: data.features[0].properties.region,
+      region: data.features[0].properties.state,
       city: data.features[0].properties.city,
     };
     return adress;

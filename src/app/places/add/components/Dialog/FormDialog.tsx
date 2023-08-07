@@ -11,7 +11,7 @@ import { Place } from "@/services/place/placeInterface";
 import NewPlaceForm from "./components/NewPlaceForm/NewPlaceForm";
 import { LatLng } from "leaflet";
 
-function MuiDialog({
+function FormDialog({
   displayDialog,
   closeDialog,
   mainTitle,
@@ -67,4 +67,4 @@ function MuiDialog({
   );
 }
 
-export default MuiDialog;
+export default FormDialog;

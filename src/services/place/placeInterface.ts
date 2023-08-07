@@ -2,14 +2,19 @@ import { LatLngExpression } from "leaflet"
 
 export interface Place {
   id?:string
-  position: LatLngExpression | {lat:number,lng:number}
+  position: {
+    lat:number
+    lng:number
+  },
   adress: {
-    street:string
-    nr:string
-  }
+    country: string
+    street: string
+    nr: string
+    postCode: string
+    region: string
+    city: string
+  },
   category:string
-  province:string
-  city:string
   imgsUrl:string[]
   rating: {
     stars:number

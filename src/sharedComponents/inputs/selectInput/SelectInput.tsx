@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { FormikConfig, FormikValues } from "formik";
@@ -14,17 +14,17 @@ export default function SelectInput({
   formik: any;
   name: string;
   value: any
-  options?: {
-    name:string
-    title:string
-  }[]
+  options?: any
   
 }) {
-
-  const [val, setVal] = useState<string>(options && options[0].name || '');
-  formik.values[name] = val
-  const [inputValue, setInputValue] = useState<string>(options && options[0].name || '');
-
+  const [val, setVal] = useState<string>(
+    value
+    );
+    const [inputValue, setInputValue] = useState<string>(
+      options && options[0] && options[0].name ? options[0].name : ""
+      );
+      formik.values[name] = val
+      
   return (
     
     <div style={{ paddingTop: "12px", paddingBottom:"12px"}}>
@@ -42,7 +42,8 @@ export default function SelectInput({
           setInputValue(newInputValue);
         }}
         id={name}
-        options={options?.map(item => item.title) || []}
+        options={options}
+        getOptionLabel={(option:any) => option.title ?? option}
         renderInput={(params) => <TextField {...params} label={label} />}
       />
     </div>

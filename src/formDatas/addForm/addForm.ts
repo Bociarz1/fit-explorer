@@ -1,4 +1,4 @@
-import { IForm } from "../sharedComponents/form/formInteface";
+import { IForm } from "../../sharedComponents/form/formInteface";
 
 export const addFormData: IForm[] = [
   {
@@ -6,7 +6,10 @@ export const addFormData: IForm[] = [
     type: "string",
     name: "category",
     title: "Kategoria",
-    initialValue: "cali",
+    initialValue: {
+      name:"cal",
+      title:"kali"
+    },
     options: [
       {
         name: "cali",
@@ -32,7 +35,7 @@ export const addFormData: IForm[] = [
   {
     variant: "longInput",
     type: "string",
-    name: "Description",
+    name: "description",
     title: "Opis",
     initialValue: "",
   },

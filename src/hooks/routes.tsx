@@ -7,15 +7,10 @@ import { auth } from "../../firebase/clientApp";
 export function withPublic(Component: ComponentType<any>) {
   return function WithPublic(props: any) {
     const router = useRouter();
-    const [user, setUser] = useAuthState(auth);
-
-    useEffect(() => {
-      if (user) {
-        router.replace("/dashboard");
-      }
-    }, [user, router]);
+    const {user} = useAuth();
 
     if (user) {
+      router.replace("/dashboard");
       return <span> Loading... </span>;
     }
 
@@ -24,18 +19,14 @@ export function withPublic(Component: ComponentType<any>) {
 }
 export function withProtected(Component: ComponentType<any>) {
   return function WithProtected(props: any) {
+    const {user} = useAuth();
     const router = useRouter();
-    const [user, setUser] = useAuthState(auth);
-    console.log("USER", user);
-    useEffect(() => {
+    console.log("USER HALO",user);
       if (!user) {
         router.replace("/");
+        return <span> Loading... </span>;
       }
-    }, [user, router]);
-
-    if (!user) {
-      return <span> Loading... </span>;
-    }
+    
 
     return <Component {...props} />;
   };

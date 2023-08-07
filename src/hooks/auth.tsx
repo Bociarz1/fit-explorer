@@ -1,14 +1,15 @@
 "use client";
 import { AuthService } from "@/services/auth/AuthService";
-import { UserCredential } from "firebase/auth";
+import { User, UserCredential } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { useContext, useState, createContext, ReactNode } from "react";
+import { useContext, useState, createContext, ReactNode, SetStateAction, Dispatch } from "react";
 
 interface AuthContextProps {
-  user: UserCredential | null;
+  user: User | null;
   error: string;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  setUser: Dispatch<SetStateAction<User | null>>
 }
 
 const authContext = createContext<AuthContextProps | null>(null);
@@ -27,7 +28,7 @@ interface AuthProviderProps {
 
 export function AuthProvider(props: AuthProviderProps) {
   const router = useRouter();
-  const [user, setUser] = useState<UserCredential | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState("");
 
   const loginWithGoogle = async (): Promise<void> => {
@@ -46,6 +47,7 @@ export function AuthProvider(props: AuthProviderProps) {
     error,
     loginWithGoogle,
     logout,
+    setUser
   };
 
   return <authContext.Provider value={value} {...props} />;

@@ -7,7 +7,7 @@ export const AuthService = {
     try {
       const userCred = await signInWithPopup(auth, googleAuth);
       return {
-        user: userCred,
+        user: userCred.user,
       };
     } catch (e: any) {
       return {
@@ -16,6 +16,6 @@ export const AuthService = {
     }
   },
   logout: async () => {
-    auth.signOut();
+    await auth.signOut();
   },
 };

@@ -5,5 +5,9 @@
 }
 
 html,
+
 body {
+  /* Fix MenuItem  override padding and overflow*/
+  padding-right: 0 !important;
+  overflow:auto !important;
 }

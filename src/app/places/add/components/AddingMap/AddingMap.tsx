@@ -14,10 +14,16 @@ import "leaflet/dist/leaflet.css";
 import { Button, Card, Theme, Typography, makeStyles } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import styles from "./style.module.css";
-import MuiDialog from "../Dialog/Dialog";
-import Form from "@/app/sharedComponents/form/Form";
-import { addFormData } from "@/app/formsDatas/addForm";
+import MuiDialog from "../Dialog/FormDialog";
+
 import autoAddress, { Address } from "@/services/place/autoAdress/autoAdress";
+
+import { addProposalPlace } from "@/services/placeProposal/PlaceService";
+import { checkUndefinedFields } from "@/functions/checkUndefinedFields/checkUndefinedFields";
+import { Place } from "@/services/place/placeInterface";
+import { dataConverter } from "@/formDatas/addForm/dataConverter/dataConverter";
+import { addFormData } from "@/formDatas/addForm/addForm";
+import Form from "@/sharedComponents/form/Form";
 
 function AddingMap() {
   // Dialog
@@ -29,7 +35,7 @@ function AddingMap() {
     setDisplayDialog(false);
   }
 
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState<any>();
 
   const dialogProps = {
     displayDialog: displayDialog,
@@ -40,7 +46,10 @@ function AddingMap() {
     buttonCancelTitle: "Anuluj",
     valid: valid,
     handleSubmitBtn: () => {
-      console.log(formData);
+      const data = { ...formData, ...clickedPosition, ...address };
+      const convertedData:Place = dataConverter(data);
+      addProposalPlace(convertedData);
+      console.log(convertedData)
     },
   };
 
@@ -66,7 +75,7 @@ function AddingMap() {
   const [clickedPosition, setClickedPosition] = useState<{
     lat: number;
     lng: number;
-  }>({lat:0,lng:0});
+  }>({ lat: 0, lng: 0 });
 
   const handleButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -88,10 +97,9 @@ function AddingMap() {
     return null;
   };
 
-  function AutoAddress({ lat, lng }: {lat:number,lng:number}) {
-    
-    const [address, setAddress] = useState<Address | null>(null);
-  
+  const [address, setAddress] = useState<Address | null>(null);
+
+  function AutoAddress({ lat, lng }: { lat: number; lng: number }) {
     useEffect(() => {
       autoAddress(lat, lng)
         .then((result) => {
@@ -105,15 +113,16 @@ function AddingMap() {
           console.error(error);
         });
     }, [lat, lng]);
-  
+
     if (!address) {
       return <p>Loading...</p>; // Return null or any other fallback component when address is not defined
     }
-      return(
-        <Typography gutterBottom variant="subtitle2">
-          {`${address.street} ${address.nr}, ${address.postCode} ${address.city}, ${address.country}`}
-        </Typography>
-      )
+
+    return (
+      <Typography gutterBottom variant="subtitle2">
+        {`${address.street} ${address.nr}, ${address.postCode} ${address.city}, ${address.country}`}
+      </Typography>
+    );
   }
   return (
     <>
@@ -149,7 +158,7 @@ function AddingMap() {
         <MapClickHandler />
       </MapContainer>
       <MuiDialog {...dialogProps}>
-        <AutoAddress lat={clickedPosition.lat} lng={clickedPosition.lng}/>
+        <AutoAddress lat={clickedPosition.lat} lng={clickedPosition.lng} />
         <Form data={addFormData} dispatchData={dispatchFormData} />
       </MuiDialog>
     </>

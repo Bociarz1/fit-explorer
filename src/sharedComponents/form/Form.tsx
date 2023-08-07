@@ -1,4 +1,3 @@
-import SelectInput from "@/app/sharedComponents/inputs/selectInput/SelectInput";
 import { Button, TextField } from "@mui/material";
 import { ErrorMessage, useFormik } from "formik";
 import { Place } from "@/services/place/placeInterface";
@@ -8,6 +7,7 @@ import { IForm } from "./formInteface";
 import { divIcon } from "leaflet";
 import FileInput from "@/app/places/add/components/Dialog/components/FileInput/FileInput";
 import * as yup from "yup";
+import SelectInput from "@mui/material/Select/SelectInput";
 
 function Form({
   data,
@@ -49,7 +49,7 @@ function Form({
             label={item.title}
             formik={formik}
             name={item.name}
-            value={formik.values[item.name]}
+            value={item.initialValue}
             options={item.options}
           />
         );

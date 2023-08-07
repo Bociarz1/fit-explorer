@@ -2,17 +2,14 @@
 import { withProtected } from "@/hooks/routes";
 import { Button, Card, Container, Grid } from "@mui/material";
 import Map from "./components/map/Map";
-import SelectInput from "../sharedComponents/inputs/selectInput/SelectInput";
-import SlectMultipleInput from "../sharedComponents/inputs/selectMultipleInput/SlectMultipleInput";
+
 import Link from "next/link";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { getPlaces } from "@/services/place/PlaceService";
 import { Place } from "@/services/place/placeInterface";
-import autoAdress from "../../services/place/autoAdress/autoAdress";
-import Form from "../sharedComponents/form/Form";
-import { IForm } from "../sharedComponents/form/formInteface";
-import { FormikProps } from "formik";
+import SlectMultipleInput from "@/sharedComponents/inputs/selectMultipleInput/SlectMultipleInput";
+
 
 function Dashboard() {
   const [places, setPlaces] = useState<Place[]>([]);

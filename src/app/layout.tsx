@@ -5,6 +5,7 @@ import styles from "./styles.module.css";
 import { Inter } from "next/font/google";
 import Footer from "@/layout/Footer/Footer";
 import { AuthProvider } from "@/hooks/auth";
+import AuthStateChanged from "@/hooks/authStateChanged";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,12 +23,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <div className={styles.containerLayout}>
-            <Nav />
-            <div className="pseudoNav"></div>
-            <div className={styles.containerPage}>{children}</div>
-            <Footer />
-          </div>
+          <AuthStateChanged>
+            <div className={styles.containerLayout}>
+              <Nav />
+              <div className="pseudoNav"></div>
+              <div className={styles.containerPage}>{children}</div>
+              <Footer />
+            </div>
+          </AuthStateChanged>
         </AuthProvider>
       </body>
     </html>
