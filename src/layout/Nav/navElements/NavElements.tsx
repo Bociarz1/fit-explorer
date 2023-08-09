@@ -25,8 +25,10 @@ function NavElements() {
           <Button
             key={page.name}
             onClick={() => navAction(page.name)}
-            sx={{ my: 2, color: "white", display: "block" }}>
-            {page.name}
+            sx={{ my: 2, color: "white", display: "flex" }}
+            startIcon={page.icon}
+            >
+            {page.title}
           </Button>
           :
           <>
@@ -35,13 +37,15 @@ function NavElements() {
                 <>
                   <Button
                     {...bindTrigger(popupState)}
-                    sx={{ my: 2, color: "white", display: "block" }}>
-                    {page.name}
+                    sx={{ my: 2, color: "white", display: "flex" }}
+                    startIcon={page.icon}
+                    >
+                    {page.title}
                   </Button>
                   <Menu {...bindMenu(popupState)}>
                     {page.subPage.map(item => (
                       <>
-                      <MenuItem onClick={popupState.close}>{item.name}</MenuItem>
+                      <MenuItem onClick={popupState.close}>{item.title}</MenuItem>
                       </>
                     ))}
 

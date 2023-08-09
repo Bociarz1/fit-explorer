@@ -1,23 +1,47 @@
 "use client";
 import { withProtected } from "@/hooks/routes";
-import { Button, Card, Container, Grid } from "@mui/material";
+import { Button, Card, Container, Grid, Stack } from "@mui/material";
 
 import Link from "next/link";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
-import { useEffect, useState } from "react";
-import { getPlaces } from "@/services/place/PlaceService";
-import { Place } from "@/services/place/placeInterface";
-import SlectMultipleInput from "@/sharedComponents/inputs/selectMultipleInput/SlectMultipleInput";
+import { pages } from "@/layout/Nav/Nav";
 
-function AdminPanel() {
+function Item({
+  props,
+}: {
+  props: {
+    name: string;
+    title: string;
+    icon: JSX.Element;
+    subPage?: { name: string; title: string; icon: React.JSX.Element }[];
+  };
+}) {
   return (
-    <Container maxWidth="lg" sx={{ marginTop: "5vh" }}>
-      <Link href="/adminPanel/places">
+    <div>
+      <Link href={`/adminPanel/${props.name}`}>
         <Button
           variant="contained"
-          startIcon={<AddLocationAltIcon />}
-          content="All places"></Button>
+          startIcon={props.icon}
+          sx={{ width: "100%" }}>
+          {props.title}
+        </Button>
       </Link>
+    </div>
+  );
+}
+
+function AdminPanel() {
+  const adminPages = pages.filter((element) => element.name === "adminPanel")[0]
+    .subPage;
+  return (
+    <Container maxWidth="sm" sx={{ marginTop: "5vh" }}>
+      <Stack spacing={2}>
+        {adminPages?.map((item) => (
+          <>
+            <Item props={item} />
+          </>
+        ))}
+      </Stack>
     </Container>
   );
 }

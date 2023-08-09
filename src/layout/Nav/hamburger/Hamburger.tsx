@@ -1,8 +1,6 @@
 import {
   Box,
-  Button,
   Collapse,
-  Divider,
   Drawer,
   IconButton,
   List,
@@ -10,8 +8,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Menu,
-  MenuItem,
   Typography,
 } from "@mui/material";
 import { User, UserCredential } from "firebase/auth";
@@ -20,19 +16,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useRouter } from "next/navigation";
 import { pages } from "../Nav";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import React from "react";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 
-function Hamburger({
-  user,
-  logo,
-}: {
-  user: User | null;
-  logo: string;
-}) {
-
+function Hamburger({ user, logo }: { user: User | null; logo: string }) {
   const router = useRouter();
 
   const navAction = (route: string) => {
@@ -66,36 +54,32 @@ function Hamburger({
       setState({ ...state, [anchor]: open });
     };
 
-  // list after hamburger click 
+  // list after hamburger click
   const navList = (anchor: Anchor) => (
     <Box
       sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}>
-        <List>
-        {pages.map(item => (
-
+      <List>
+        {pages.map((item) => (
           // one list item
           <>
-            <ListItem key={item.name} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {<InboxIcon/>}
-                </ListItemIcon>
-                <ListItemText primary={item.name} />
+            <ListItem key={item.name} disablePadding
+            >
+              <ListItemButton onClick={()=> navAction(item.name)}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.title} />
               </ListItemButton>
             </ListItem>
-                          <Collapse component="li" in={true} timeout="auto" unmountOnExit>
-                          <List disablePadding>
-                            {/* <ListItemLink sx={{ pl: 4 }} to="/inbox/important" /> */}
-                          </List>
-                        </Collapse>
-                  </>
+            <Collapse component="li" in={true} timeout="auto" unmountOnExit>
+              <List disablePadding>
+                {/* <ListItemLink sx={{ pl: 4 }} to="/inbox/important" /> */}
+              </List>
+            </Collapse>
+          </>
         ))}
-          
-      
-        </List>
+      </List>
     </Box>
   );
 
@@ -103,7 +87,7 @@ function Hamburger({
     <>
       {user ? (
         <>
-        {/* Hamburger icon */}
+          {/* Hamburger icon */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -115,19 +99,18 @@ function Hamburger({
               <MenuIcon />
             </IconButton>
 
-              {/* Nav Elements */}
-              
-                <>
-                  <React.Fragment key={anchor}>
-                    <Drawer
-                      anchor={anchor}
-                      open={state[anchor]}
-                      onClose={toggleDrawer(anchor, false)}>
-                      {navList(anchor)}
-                    </Drawer>
-                  </React.Fragment>
-                </>
-             
+            {/* Nav Elements */}
+
+            <>
+              <React.Fragment key={anchor}>
+                <Drawer
+                  anchor={anchor}
+                  open={state[anchor]}
+                  onClose={toggleDrawer(anchor, false)}>
+                  {navList(anchor)}
+                </Drawer>
+              </React.Fragment>
+            </>
           </Box>
         </>
       ) : null}
