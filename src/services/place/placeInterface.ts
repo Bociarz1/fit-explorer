@@ -6,7 +6,7 @@ export interface Place {
     lat:number
     lng:number
   },
-  adress: {
+  address: {
     country: string
     street: string
     nr: string

@@ -1,71 +1,99 @@
 import { Uploader } from "uploader";
 import { UploadButton } from "react-uploader";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import { useEffect, useState } from "react";
 import { db } from "../../../../../../../../firebase/clientApp";
+import { storage } from "../../../../../../../../firebase/clientApp";
+import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 
-function FileInput({dispatchImgs, item}:{dispatchImgs:(imgs:string[],names:string)=>void, item:{
-  variant: string,
-  type: string,
-  name: string,
-  title: string,
-}}) {
-  const selectedFiles: string[] = [];
-
-  // Get production API keys from Upload.io
-  const uploader = Uploader({
-    apiKey: "free",
+function FileInput({
+  dispatchImgs,
+  item,
+  uploadImageOutput,
+  uploadFilesFlag,
+}: {
+  dispatchImgs: (imgs: string[], names: string) => Promise<void>;
+  item: {
+    variant: string;
+    type: string;
+    name: string;
+    title: string;
+  };
+  uploadImageOutput: (func: () => Promise<void>) => void;
+  uploadFilesFlag: boolean;
+}) {
+  useEffect(() => {
+    
+      uploadImageOutput(uploadImage);
+    
   });
 
-  // Customize the file upload UI (see "customization"):
-  const options = { multi: true };
+  const [imageUpload, setImageUpload] = useState<FileList | null>(null);
+  const [imageList, setImageList] = useState<string[]>([]);
+  const imageListRef = ref(storage, "");
+  // useEffect(() => {
+  //   listAll(imageListRef).then((res) => {
+  //     res.items.forEach((item) => {
+  //       getDownloadURL(item).then((url) => {
+  //         setImageList((prev) => [...prev, url]);
+  //       });
+  //     });
+  //   });
+  // }, []);
 
-  const [valid, setValid] = useState<boolean>(false)
-  const divStyle: React.CSSProperties = {
-    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
-    fontWeight: 400,
-    fontSize: "0.75rem",
-    lineHeight: 1.66,
-    letterSpacing: "0.03333em",
-    textAlign: "left",
-    marginTop: "3px",
-    marginRight: "14px",
-    marginBottom: 0,
-    marginLeft: "14px",
-    color: valid ? 'black' : '#d32f2f'
-  };
-  
+  function onChangeHandler(event: any) {
+    setImageUpload(event.target.files);
+    if (Array.from(event.target.files).length > 0) {
+      dispatchImgs(["valid"], item.name);
+    }
+  }
+
+  function uploadImage(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      if (!imageUpload || imageUpload.length === 0) {
+        alert("No images selected");
+        return;
+      }
+
+      const uploadPromises: any = [];
+
+      Array.from(imageUpload).forEach((file) => {
+        const imageRef = ref(storage, `images/${uuidv4()}`);
+        const uploadPromise = uploadBytes(imageRef, file)
+          .then((snapshot) => getDownloadURL(snapshot.ref))
+          .catch(() => null); // If an upload fails, resolve with null URL
+        uploadPromises.push(uploadPromise);
+      });
+
+      Promise.all(uploadPromises)
+        .then((urls) => {
+          const validUrls = urls.filter((url) => url !== null);
+          dispatchImgs(validUrls, item.name).then(() => {
+            alert("Images uploaded successfully");
+            resolve();
+          });
+        })
+        .catch(() => {
+          alert("Some uploads failed");
+          reject();
+        });
+    });
+  }
 
   return (
-   <div id="fileInputContainer" style={{paddingTop:"12px",paddingBottom:"12px"}}>
-     <UploadButton
-      uploader={uploader} // Required.
-      options={options} // Optional.
-      onComplete={(files) => {
-        // Optional.
-        if (files.length === 0) {
-          console.log("No files selected.");
-        } else {
-          console.log("Files uploaded:");
-            files.map((f) => selectedFiles.push(f.fileUrl))
-            dispatchImgs(selectedFiles,item.name)
-            setValid(true)
-        }
-      }}>
-      {({ onClick }) => (
-        <Button
-          onClick={onClick}
-          variant="contained"
-          startIcon={<DriveFolderUploadIcon />}
-          >
-          
-          Upload a {item.title}
-        </Button>
-      )}
-    </UploadButton>
-      {valid ? (<div style={{ ...divStyle }}>Uploaded</div>):(<div style={{ ...divStyle }}>Not uploaded</div>) }
-   </div>
+    <div
+      id="fileInputContainer"
+      style={{ paddingTop: "12px", paddingBottom: "12px" }}>
+      <TextField
+        onChange={(event: any) => onChangeHandler(event)}
+        type="file"
+        inputProps={{
+          multiple: true,
+        }}
+      />
+    </div>
   );
 }
 

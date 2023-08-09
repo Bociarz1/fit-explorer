@@ -4,7 +4,7 @@ export function dataConverter(data:any) {
       lat:data.lat,
       lng:data.lng
     },
-    adress: {
+    address: {
       country: data.country,
       street: data.street ?? '',
       nr: data.nr ?? '',

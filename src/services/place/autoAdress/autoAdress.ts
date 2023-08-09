@@ -18,7 +18,7 @@ export default async function autoAddress(
   try {
     const response = await fetch(url);
     const data = await response.json();
-    const adress: Address = {
+    const address: Address = {
       country: data.features[0].properties.country,
       street: data.features[0].properties.street,
       nr: data.features[0].properties.housenumber,
@@ -26,7 +26,7 @@ export default async function autoAddress(
       region: data.features[0].properties.state,
       city: data.features[0].properties.city,
     };
-    return adress;
+    return address;
   } catch (error) {
     const res = {errorMessage:"Problem with fetching data from Geoapify"}
     return res;

@@ -6,10 +6,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { addPlace } from "@/services/place/PlaceService";
-import { Place } from "@/services/place/placeInterface";
-import NewPlaceForm from "./components/NewPlaceForm/NewPlaceForm";
-import { LatLng } from "leaflet";
 
 function FormDialog({
   displayDialog,

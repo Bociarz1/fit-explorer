@@ -37,6 +37,16 @@ function AddingMap() {
 
   const [formData, setFormData] = useState<any>();
 
+  // Upload File before patch data to db
+  let sendImgsToDb: () => Promise<void> = () => new Promise(resolve => {
+     resolve()
+  })
+  function uploadImageOutputSecond(Childfunc: () => Promise<void>) {
+    sendImgsToDb = Childfunc;
+  }
+
+  const [uploadFilesFlag,setUploadFilesFlag] = useState<boolean>(false)
+
   const dialogProps = {
     displayDialog: displayDialog,
     closeDialog: closeDialog,
@@ -46,10 +56,27 @@ function AddingMap() {
     buttonCancelTitle: "Anuluj",
     valid: valid,
     handleSubmitBtn: () => {
+
+      // Check for File Inut in Form
+      let containFileInut: boolean = false;
+      addFormData.forEach((item) => {
+        item.variant === "imgFile" ? (containFileInut = true) : null;
+      });
+
+      if (containFileInut) {
+
+        setUploadFilesFlag(true)
+        sendImgsToDb().then(() => {
+          const data = { ...formData, ...clickedPosition, ...address };
+          const convertedData: Place = dataConverter(data);
+          addProposalPlace(convertedData);
+        })
+        return;
+      }
+
       const data = { ...formData, ...clickedPosition, ...address };
-      const convertedData:Place = dataConverter(data);
+      const convertedData: Place = dataConverter(data);
       addProposalPlace(convertedData);
-      console.log(convertedData)
     },
   };
 
@@ -159,7 +186,12 @@ function AddingMap() {
       </MapContainer>
       <MuiDialog {...dialogProps}>
         <AutoAddress lat={clickedPosition.lat} lng={clickedPosition.lng} />
-        <Form data={addFormData} dispatchData={dispatchFormData} />
+        <Form
+          data={addFormData}
+          dispatchData={dispatchFormData}
+          uploadFilesFlag={uploadFilesFlag}
+          uploadImageOutputSecond={uploadImageOutputSecond}
+        />
       </MuiDialog>
     </>
   );

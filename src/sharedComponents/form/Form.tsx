@@ -7,20 +7,29 @@ import { IForm } from "./formInteface";
 import { divIcon } from "leaflet";
 import FileInput from "@/app/places/add/components/Dialog/components/FileInput/FileInput";
 import * as yup from "yup";
-import SelectInput from "@mui/material/Select/SelectInput";
+import SelectInput from "../inputs/selectInput/SelectInput";
 
 function Form({
   data,
   dispatchData,
+  uploadFilesFlag,
+  uploadImageOutputSecond
 }: {
   data: IForm[];
   dispatchData: (data: any, isValid: boolean) => void;
+  uploadFilesFlag: boolean;
+  uploadImageOutputSecond: (func: () => Promise<void>) => void
 }) {
   function isValid(object: any): boolean {
     for (let key in object) {
       if (object[key] === "" || object[key].length < 1) return false;
     }
     return true;
+  }
+
+  // Pushing data to parent component
+  function uploadImageOutput(Childfunc: () => Promise<void>) {
+    uploadImageOutputSecond(Childfunc)
   }
 
   function whichType(type: string) {
@@ -102,7 +111,7 @@ function Form({
         );
         break;
       case "imgFile":
-        return <FileInput dispatchImgs={dispatchImgs} item={item} />;
+        return <FileInput dispatchImgs={dispatchImgs} item={item} uploadFilesFlag={uploadFilesFlag} uploadImageOutput={uploadImageOutput}/>;
         break;
       default:
     }
@@ -118,8 +127,11 @@ function Form({
     validationSchema[key.name] = yup.string().required("Required");
   }
 
-  function dispatchImgs(imgs: string[], name: string) {
-    formik.setFieldValue(name, imgs);
+  function dispatchImgs(imgs: string[], name: string): Promise<void> {
+    return new Promise((resolve,reject)=> {
+      formik.values[name] = imgs
+      resolve()
+    })
   }
 
   const formik = useFormik({
