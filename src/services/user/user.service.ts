@@ -4,11 +4,11 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { DocumentData, collection, getFirestore } from "firebase/firestore";
 import { Place } from "../place/placeInterface";
 
-export async function getProposalPlaces(): Promise<Place[]> {
+export async function getUsers(): Promise<any[]> {
   try {
-    const querySnapshot = await db.collection("proposalPlaces").get();
+    const querySnapshot = await db.collection("User").get();
     const data = querySnapshot.docs.map((doc) => {
-      const item = doc.data() as Place;
+      const item = doc.data() as any;
       item.id = doc.id;
       return item;
     });
@@ -19,11 +19,11 @@ export async function getProposalPlaces(): Promise<Place[]> {
   }
 }
 
-export async function getProposalPlaceById(
+export async function getUserById(
   id: string
 ): Promise<Place | void> {
   try {
-    const docRef = await db.collection("proposalPlaces").doc(id).get();
+    const docRef = await db.collection("users").doc(id).get();
 
     if (docRef.exists) {
       const data = docRef.data() as Place;
@@ -34,15 +34,5 @@ export async function getProposalPlaceById(
   } catch (error) {
     console.log(error);
    
-  }
-}
-
-export async function addProposalPlace(newProposalPlace: Place) {
-  try {
-    const docRef = await db.collection("proposalPlaces").add(newProposalPlace);
-    return docRef;
-  } catch (error) {
-    console.log(error);
-    return null;
   }
 }

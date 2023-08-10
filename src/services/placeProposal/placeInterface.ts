@@ -1,8 +1,13 @@
 import { LatLngExpression } from "leaflet"
 
-export interface Place {
+export interface ProposalPlaceInterface {
   id?:string
-  editorId?: string
+  editorInfo: {
+    id: string
+    userName: string,
+    email: string,
+    avatarUrl: string,
+  },
   position: {
     lat:number
     lng:number

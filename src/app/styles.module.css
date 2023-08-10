@@ -12,6 +12,7 @@
   justify-content: flex-start;
   align-items: center;
   max-width: 100%;
+  background-color: #E5E6E4;
 }
 
 @media (width > 900px) {

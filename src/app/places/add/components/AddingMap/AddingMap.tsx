@@ -18,14 +18,18 @@ import MuiDialog from "../Dialog/FormDialog";
 
 import autoAddress, { Address } from "@/services/place/autoAdress/autoAdress";
 
-import { addProposalPlace } from "@/services/placeProposal/PlaceService";
+import { addProposalPlace } from "@/services/placeProposal/placeProposal.service";
 import { checkUndefinedFields } from "@/functions/checkUndefinedFields/checkUndefinedFields";
 import { Place } from "@/services/place/placeInterface";
 import { dataConverter } from "@/formDatas/addForm/dataConverter/dataConverter";
 import { addFormData } from "@/formDatas/addForm/addForm";
 import Form from "@/sharedComponents/form/Form";
+import useAuth from "@/hooks/auth";
 
 function AddingMap() {
+  // auth
+  const auth = useAuth();
+
   // Dialog
 
   const [displayDialog, setDisplayDialog] = useState<boolean>(false);
@@ -38,14 +42,15 @@ function AddingMap() {
   const [formData, setFormData] = useState<any>();
 
   // Upload File before patch data to db
-  let sendImgsToDb: () => Promise<void> = () => new Promise(resolve => {
-     resolve()
-  })
+  let sendImgsToDb: () => Promise<void> = () =>
+    new Promise((resolve) => {
+      resolve();
+    });
   function uploadImageOutputSecond(Childfunc: () => Promise<void>) {
     sendImgsToDb = Childfunc;
   }
 
-  const [uploadFilesFlag,setUploadFilesFlag] = useState<boolean>(false)
+  const [uploadFilesFlag, setUploadFilesFlag] = useState<boolean>(false);
 
   const dialogProps = {
     displayDialog: displayDialog,
@@ -55,8 +60,8 @@ function AddingMap() {
     buttonAcceptTitle: "Wyślij",
     buttonCancelTitle: "Anuluj",
     valid: valid,
-    handleSubmitBtn: () => {
-
+    handleSubmitBtn: async () => {
+      const userInfo = await auth.getClientUserInfo();
       // Check for File Inut in Form
       let containFileInut: boolean = false;
       addFormData.forEach((item) => {
@@ -64,17 +69,26 @@ function AddingMap() {
       });
 
       if (containFileInut) {
-
-        setUploadFilesFlag(true)
+        setUploadFilesFlag(true);
         sendImgsToDb().then(() => {
-          const data = { ...formData, ...clickedPosition, ...address };
+          const data = {
+            ...userInfo,
+            ...formData,
+            ...clickedPosition,
+            ...address,
+          };
           const convertedData: Place = dataConverter(data);
           addProposalPlace(convertedData);
-        })
+        });
         return;
       }
 
-      const data = { ...formData, ...clickedPosition, ...address };
+      const data = {
+        editorId: userInfo,
+        ...formData,
+        ...clickedPosition,
+        ...address,
+      };
       const convertedData: Place = dataConverter(data);
       addProposalPlace(convertedData);
     },

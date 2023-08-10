@@ -1,5 +1,11 @@
 export function dataConverter(data:any) {
   const newPlace = {
+    editorInfo: {
+      id: data.id,
+      userName: data.userName,
+      email: data.email,
+      avatarUrl: data.avatarUrl,
+    },
     position: {
       lat:data.lat,
       lng:data.lng

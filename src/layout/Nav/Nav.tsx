@@ -9,24 +9,28 @@ import LogoWithTitle from "./logo/Logo";
 import User from "./user/User";
 import NavElements from "./navElements/NavElements";
 import useAuth from "@/hooks/auth";
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import InfoIcon from '@mui/icons-material/Info';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import NotListedLocationIcon from '@mui/icons-material/NotListedLocation';
-import PlaceIcon from '@mui/icons-material/Place';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import InfoIcon from "@mui/icons-material/Info";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
+import PlaceIcon from "@mui/icons-material/Place";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 
 export const pages = [
-  { name: "dashboard", title: "Strona główna", icon: <DashboardIcon/>},
-  { name: "aboutme", title: "O mnie", icon: <InfoIcon/>},
+  { name: "dashboard", title: "Strona główna", icon: <DashboardIcon /> },
+  { name: "about", title: "O mnie", icon: <InfoIcon /> },
   {
     name: "adminPanel",
     title: "Panel admina",
-    icon: <AdminPanelSettingsIcon/>,
+    icon: <AdminPanelSettingsIcon />,
     subPage: [
-      { name: "proposalPlaces", title: "Proponowane miejsca", icon: <NotListedLocationIcon/>},
-      { name: "places", title: "Miejsca", icon:  <PlaceIcon/>},
-      { name: "users", title: "Użytkownicy", icon: <PeopleAltIcon/> },
+      {
+        name: "proposalPlaces",
+        title: "Proponowane miejsca",
+        icon: <NotListedLocationIcon />,
+      },
+      { name: "places", title: "Miejsca", icon: <PlaceIcon /> },
+      { name: "users", title: "Użytkownicy", icon: <PeopleAltIcon /> },
     ],
   },
 ];

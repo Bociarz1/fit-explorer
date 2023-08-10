@@ -19,11 +19,11 @@ import {
 import ImgGallery from "./components/ImgGallery/ImgGallery";
 import AssistantDirectionIcon from "@mui/icons-material/AssistantDirection";
 import EditLocationAltIcon from "@mui/icons-material/EditLocationAlt";
-import { getPlaceById } from "@/services/place/PlaceService";
+import { getPlaceById } from "@/services/place/place.service";
 import { Place } from "@/services/place/placeInterface";
 
-function MainTitle({ item }: {item:Place}) {
-  console.log("MAIN TITLE",item)
+function MainTitle({ item }: { item: Place }) {
+  console.log("MAIN TITLE", item);
   return (
     <>
       <Typography variant="h5" component="div" marginBottom={1}>
@@ -58,13 +58,13 @@ function Place({ params }: { params: { id: string } }) {
   const { id } = params;
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
-  const [item, setItem] = useState<Place>()
+  const [item, setItem] = useState<Place>();
 
   useEffect(() => {
     const getData = async () => {
-      const place = await getPlaceById(id) 
-      if (place === undefined) return
-      setItem(place)
+      const place = await getPlaceById(id);
+      if (place === undefined) return;
+      setItem(place);
     };
     getData();
   }, []);
@@ -82,7 +82,7 @@ function Place({ params }: { params: { id: string } }) {
           </Grid>
         ) : null}
         <Grid item xs={12} sm={8}>
-          <ImgGallery imgsUrl={item.imgsUrl}/>
+          <ImgGallery imgsUrl={item.imgsUrl} />
         </Grid>
         <Grid item xs={12} sm={4}>
           {!isXs ? (
